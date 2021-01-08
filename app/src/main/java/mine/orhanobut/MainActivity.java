@@ -1,5 +1,6 @@
 package mine.orhanobut;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
+import static com.orhanobut.logger.Logger.INFO;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Logger.d("hello");
         Logger.t("TNT");
         Logger.d("debug");
-        Logger.t("TNT");
+//        Logger.t("TNT");
         Logger.e("error");
         Logger.w("warning");
         Logger.v("verbose");
@@ -94,6 +96,30 @@ public class MainActivity extends AppCompatActivity {
         Logger.addLogAdapter(new AndroidLogAdapter());//控制台日志
         Logger.d("hello");
     }
+
+    public void query(View view) {
+        System.out.println("~~unbind~~");
+
+        Logger.addLogAdapter(new AndroidLogAdapter(PrettyFormatStrategy.newBuilder()
+                .tag("XX")
+                .build()){
+            @Override
+            public boolean isLoggable(int priority, @Nullable String tag) {
+                System.out.println("priority = " + priority + ", tag = " + tag);
+
+                return priority >= INFO;//只记录INFO及其以上级别日志
+//                return BuildConfig.DEBUG;
+            }
+        });
+
+        Logger.d("debug");
+        Logger.e("error");
+        Logger.w("warning");
+        Logger.v("verbose");
+        Logger.i("information");
+        Logger.wtf("What a Terrible Failure");
+    }
+
 
 
 
